@@ -21,6 +21,7 @@ Declare sources in `pyproject.toml`:
 skills = [
     "PsiACE/skills",
     { git = "https://github.com/PsiACE/skills.git", ref = "v1.0.0", include = ["python*"] },
+    { git = "vercel-labs/agent-skills", subpath = "skills/find-skills" },
 ]
 ```
 
@@ -29,7 +30,15 @@ Supported source formats:
 - Full Git URLs such as `https://github.com/PsiACE/skills.git`
 - GitHub shorthand in `OWNER/REPO` form such as `PsiACE/skills`
 
-Each repository must contain a top-level `skills/` directory. Every direct child directory under `skills/` is treated as one skill. `include` filters by skill directory name with standard shell-style globs.
+Discovery roughly follows the `npm skills` package:
+
+- If the selected path itself contains `SKILL.md`, it is treated as one skill.
+- Otherwise it searches common skill roots such as `skills/`, `skills/.curated/`, `.codex/skills/`, `.claude/skills/`, `.agents/skills/` and similar agent-specific locations.
+- If nothing is found in standard locations, it falls back to a bounded recursive search.
+
+`include` filters by discovered skill directory name with standard shell-style globs.
+
+If you need to point at a specific directory inside a repository, use the table form with `subpath`.
 
 When the wheel already contains files under `bub_skills/`, files coming from the plugin override matching paths.
 

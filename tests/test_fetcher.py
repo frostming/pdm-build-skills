@@ -35,3 +35,33 @@ def test_later_sources_override_existing_skill(
     assert (destination / "python-alpha" / "SKILL.md").read_text(
         encoding="utf-8"
     ) == "alpha\n"
+
+
+def test_materialize_sources_discovers_priority_skill_locations(
+    discovered_skill_repo: Path, tmp_path: Path
+) -> None:
+    destination = tmp_path / "out"
+
+    materialize_sources([SkillSource(git=str(discovered_skill_repo))], destination)
+
+    assert (destination / "codex-review" / "SKILL.md").read_text(encoding="utf-8") == (
+        "codex-review\n"
+    )
+    assert (destination / "docs-lint" / "SKILL.md").read_text(encoding="utf-8") == (
+        "docs-lint\n"
+    )
+    assert not (destination / "fallback-skill").exists()
+
+
+def test_materialize_sources_supports_subpath_selection(
+    discovered_skill_repo: Path, tmp_path: Path
+) -> None:
+    destination = tmp_path / "out"
+    source = SkillSource(git=str(discovered_skill_repo), subpath="misc/deep")
+
+    materialize_sources([source], destination)
+
+    assert (destination / "fallback-skill" / "SKILL.md").read_text(
+        encoding="utf-8"
+    ) == ("fallback\n")
+    assert not (destination / "codex-review").exists()

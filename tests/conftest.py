@@ -37,3 +37,43 @@ def skill_repo(tmp_path: Path) -> Path:
     _run_git(repo, "add", ".")
     _run_git(repo, "commit", "-m", "add gamma")
     return repo
+
+
+@pytest.fixture()
+def discovered_skill_repo(tmp_path: Path) -> Path:
+    repo = tmp_path / "discovered-skill-repo"
+    repo.mkdir()
+    _run_git(repo, "init")
+    _run_git(repo, "config", "user.email", "tests@example.com")
+    _run_git(repo, "config", "user.name", "Tests")
+
+    (repo / ".codex" / "skills" / "codex-review").mkdir(parents=True)
+    (repo / ".codex" / "skills" / "codex-review" / "SKILL.md").write_text(
+        "codex-review\n", encoding="utf-8"
+    )
+
+    (repo / "plugins" / "docs" / "skills" / "docs-lint").mkdir(parents=True)
+    (repo / "plugins" / "docs" / "skills" / "docs-lint" / "SKILL.md").write_text(
+        "docs-lint\n", encoding="utf-8"
+    )
+    (repo / ".claude-plugin").mkdir()
+    (repo / ".claude-plugin" / "marketplace.json").write_text(
+        (
+            "{"
+            '"metadata": {"pluginRoot": "./plugins"},'
+            '"plugins": ['
+            '{"name": "docs", "source": "./docs", "skills": ["./skills/docs-lint"]}'
+            "]"
+            "}"
+        ),
+        encoding="utf-8",
+    )
+
+    (repo / "misc" / "deep" / "fallback-skill").mkdir(parents=True)
+    (repo / "misc" / "deep" / "fallback-skill" / "SKILL.md").write_text(
+        "fallback\n", encoding="utf-8"
+    )
+
+    _run_git(repo, "add", ".")
+    _run_git(repo, "commit", "-m", "initial")
+    return repo

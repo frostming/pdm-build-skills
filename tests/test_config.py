@@ -31,3 +31,25 @@ def test_normalize_git_url_keeps_local_paths(tmp_path) -> None:
     repo = tmp_path / "repo"
     repo.mkdir()
     assert normalize_git_url(str(repo)) == str(repo)
+
+
+def test_parse_skill_sources_supports_explicit_subpath() -> None:
+    data = {
+        "tool": {
+            "bub": {
+                "skills": [
+                    {
+                        "git": "vercel-labs/agent-skills",
+                        "subpath": "skills/review",
+                    }
+                ]
+            }
+        }
+    }
+
+    sources = parse_skill_sources(data)
+
+    assert [source.git for source in sources] == [
+        "https://github.com/vercel-labs/agent-skills.git"
+    ]
+    assert sources[0].subpath == "skills/review"
