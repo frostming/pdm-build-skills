@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pdm-build-bub"
+version = "0.1.0"
+description = "A pdm-backend plugin that vendors remote skill repositories into wheels."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pdm-backend>=2.4",
+]
+authors = [
+    { name = "Frost Ming", email = "me@frostming.com" },
+]
+license = { text = "MIT" }
+keywords = ["pdm", "build", "plugin", "skills"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.entry-points."pdm.build.hook"]
+bub = "pdm_build_bub.backend:BubBuildHook"
+
+[project.scripts]
+bub-skills = "pdm_build_bub.cli:main"
+
+[dependency-groups]
+test = [
+    "pytest>=8.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pdm_build_bub"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/LICENSE",
+    "/src",
+    "/tests",
+    "/README.md",
+    "/PLAN.md",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
