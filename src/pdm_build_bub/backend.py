@@ -18,12 +18,10 @@ else:
 
 class BubBuildHook(BuildHookInterface):
     def pdm_build_hook_enabled(self, context: Context) -> bool:
-        if context.target != "wheel":
+        if context.target not in ("wheel", "editable"):
             return False
         pyproject_path = context.root / "pyproject.toml"
-        if not pyproject_path.is_file():
-            return False
-        return bool(load_skill_sources(pyproject_path))
+        return pyproject_path.is_file()
 
     def pdm_build_clean(self, context: Context) -> None:
         build_root = self._build_root(context, create=False)

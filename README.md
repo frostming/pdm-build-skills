@@ -1,6 +1,6 @@
 # pdm-build-bub
 
-`pdm-build-bub` is a `pdm-backend` build hook that downloads skill repositories declared in `pyproject.toml` and vendors them into the built wheel under `bub_skills/`.
+`pdm-build-bub` is a `pdm-backend` build hook that downloads skill repositories declared in `pyproject.toml` and vendors them into built wheel and editable artifacts under `bub_skills/`.
 
 ## Installation
 
