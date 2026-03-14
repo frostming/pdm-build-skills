@@ -1,6 +1,6 @@
-# pdm-build-bub
+# pdm-build-skills
 
-`pdm-build-bub` is a `pdm-backend` build hook that downloads skill repositories declared in `pyproject.toml` and vendors them into built wheel and editable artifacts under `bub_skills/`.
+`pdm-build-skills` is a `pdm-backend` build hook that downloads skill repositories declared in `pyproject.toml` and vendors them into built wheel and editable artifacts under `skills/`.
 
 ## Installation
 
@@ -8,7 +8,7 @@ Add the plugin to the project that produces the wheel:
 
 ```toml
 [build-system]
-requires = ["pdm-backend", "pdm-build-bub"]
+requires = ["pdm-backend", "pdm-build-skills"]
 build-backend = "pdm.backend"
 ```
 
@@ -17,7 +17,7 @@ build-backend = "pdm.backend"
 Declare sources in `pyproject.toml`:
 
 ```toml
-[tool.bub]
+[tool.pdm.build]
 skills = [
     "PsiACE/skills",
     { git = "https://github.com/PsiACE/skills.git", ref = "v1.0.0", include = ["python*"] },
@@ -40,10 +40,10 @@ Discovery roughly follows the `npm skills` package:
 
 If you need to point at a specific directory inside a repository, use the table form with `subpath`.
 
-When the wheel already contains files under `bub_skills/`, files coming from the plugin override matching paths.
+When the wheel already contains files under `skills/`, files coming from the plugin override matching paths.
 
 
-This downloads the configured skills into `./bub_skills`. Use `--output /path/to/dir` to choose another directory.
+This downloads the configured skills into `./skills`. Use `--output /path/to/dir` to choose another directory.
 
 ## Development
 

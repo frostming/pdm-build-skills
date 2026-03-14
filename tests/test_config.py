@@ -1,20 +1,22 @@
 from __future__ import annotations
 
-from pdm_build_bub.config import normalize_git_url, parse_skill_sources
+from pdm_build_skills.config import normalize_git_url, parse_skill_sources
 
 
 def test_parse_skill_sources() -> None:
     data = {
         "tool": {
-            "bub": {
-                "skills": [
-                    "PsiACE/skills",
-                    {
-                        "git": "https://example.com/repo.git",
-                        "ref": "v1.0.0",
-                        "include": ["python*"],
-                    },
-                ]
+            "pdm": {
+                "build": {
+                    "skills": [
+                        "PsiACE/skills",
+                        {
+                            "git": "https://example.com/repo.git",
+                            "ref": "v1.0.0",
+                            "include": ["python*"],
+                        },
+                    ]
+                }
             }
         }
     }
@@ -36,13 +38,15 @@ def test_normalize_git_url_keeps_local_paths(tmp_path) -> None:
 def test_parse_skill_sources_supports_explicit_subpath() -> None:
     data = {
         "tool": {
-            "bub": {
-                "skills": [
-                    {
-                        "git": "vercel-labs/agent-skills",
-                        "subpath": "skills/review",
-                    }
-                ]
+            "pdm": {
+                "build": {
+                    "skills": [
+                        {
+                            "git": "vercel-labs/agent-skills",
+                            "subpath": "skills/review",
+                        }
+                    ]
+                }
             }
         }
     }

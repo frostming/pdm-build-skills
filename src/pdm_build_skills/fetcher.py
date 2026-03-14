@@ -56,7 +56,7 @@ def materialize_sources(
     destination.mkdir(parents=True, exist_ok=True)
     materialized: list[MaterializedSkill] = []
     for source in sources:
-        with tempfile.TemporaryDirectory(prefix="pdm-build-bub-") as clone_dir:
+        with tempfile.TemporaryDirectory(prefix="pdm-build-skills-") as clone_dir:
             repo_dir = _clone_repository(source, Path(clone_dir))
             for skill_dir in _discover_skill_directories(repo_dir, source):
                 target_dir = destination / skill_dir.name

@@ -3,7 +3,7 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [project]
-name = "pdm-build-bub"
+name = "pdm-build-skills"
 description = "A pdm-backend plugin that vendors remote skill repositories into wheels."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -26,7 +26,7 @@ classifiers = [
 dynamic = ["version"]
 
 [project.entry-points."pdm.build.hook"]
-bub = "pdm_build_bub.backend:BubBuildHook"
+skills = "pdm_build_skills.backend:SkillsBuildHook"
 
 [dependency-groups]
 test = [

@@ -39,7 +39,7 @@ wheels = [
 ]
 
 [[package]]
-name = "pdm-build-bub"
+name = "pdm-build-skills"
 source = { editable = "." }
 dependencies = [
     { name = "pdm-backend" },

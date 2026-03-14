@@ -63,9 +63,9 @@ def load_skill_sources(pyproject_path: Path) -> list[SkillSource]:
 
 
 def parse_skill_sources(data: dict[str, Any]) -> list[SkillSource]:
-    raw_sources = data.get("tool", {}).get("bub", {}).get("skills", [])
+    raw_sources = data.get("tool", {}).get("pdm", {}).get("build", {}).get("skills", [])
     if not isinstance(raw_sources, list):
-        raise ValueError("[tool.bub].skills must be a list")
+        raise ValueError("[tool.pdm.build].skills must be a list")
 
     parsed: list[SkillSource] = []
     for index, item in enumerate(raw_sources):

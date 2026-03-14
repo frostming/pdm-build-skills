@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 from pdm.backend.hooks.base import Context
 
-from pdm_build_bub.backend import BubBuildHook
+from pdm_build_skills.backend import SkillsBuildHook
 
 
 def _make_context(project_root: Path, tmp_path: Path, target: str) -> Context:
@@ -28,7 +28,7 @@ def _make_project(project_root: Path, skill_repo: Path) -> None:
     (project_root / "pyproject.toml").write_text(
         "\n".join(
             [
-                "[tool.bub]",
+                "[tool.pdm.build]",
                 "skills = [",
                 f'  {{ git = "{skill_repo}", include = ["python*"] }},',
                 "]",
@@ -44,7 +44,7 @@ def test_build_hook_enabled_for_wheel_and_editable(
     project_root = tmp_path / "project"
     _make_project(project_root, skill_repo)
 
-    hook = BubBuildHook()
+    hook = SkillsBuildHook()
 
     assert hook.pdm_build_hook_enabled(_make_context(project_root, tmp_path, "wheel"))
     assert hook.pdm_build_hook_enabled(
@@ -60,18 +60,17 @@ def test_build_hook_updates_wheel_files(skill_repo: Path, tmp_path: Path) -> Non
     _make_project(project_root, skill_repo)
 
     context = _make_context(project_root, tmp_path, "wheel")
-    files = {"bub_skills/python-alpha/SKILL.md": project_root / "old.txt"}
+    files = {"skills/python-alpha/SKILL.md": project_root / "old.txt"}
 
-    hook = BubBuildHook()
+    hook = SkillsBuildHook()
     hook.pdm_build_update_files(context, files)
 
     assert sorted(files) == [
-        "bub_skills/python-alpha/SKILL.md",
-        "bub_skills/python-gamma/SKILL.md",
+        "skills/python-alpha/SKILL.md",
+        "skills/python-gamma/SKILL.md",
     ]
     assert (
-        files["bub_skills/python-alpha/SKILL.md"].read_text(encoding="utf-8")
-        == "alpha\n"
+        files["skills/python-alpha/SKILL.md"].read_text(encoding="utf-8") == "alpha\n"
     )
 
 
@@ -80,16 +79,15 @@ def test_build_hook_updates_editable_files(skill_repo: Path, tmp_path: Path) -> 
     _make_project(project_root, skill_repo)
 
     context = _make_context(project_root, tmp_path, "editable")
-    files = {"bub_skills/python-alpha/SKILL.md": project_root / "old.txt"}
+    files = {"skills/python-alpha/SKILL.md": project_root / "old.txt"}
 
-    hook = BubBuildHook()
+    hook = SkillsBuildHook()
     hook.pdm_build_update_files(context, files)
 
     assert sorted(files) == [
-        "bub_skills/python-alpha/SKILL.md",
-        "bub_skills/python-gamma/SKILL.md",
+        "skills/python-alpha/SKILL.md",
+        "skills/python-gamma/SKILL.md",
     ]
     assert (
-        files["bub_skills/python-alpha/SKILL.md"].read_text(encoding="utf-8")
-        == "alpha\n"
+        files["skills/python-alpha/SKILL.md"].read_text(encoding="utf-8") == "alpha\n"
     )

@@ -16,7 +16,9 @@ else:
     Context = object
 
 
-class BubBuildHook(BuildHookInterface):
+class SkillsBuildHook(BuildHookInterface):
+    SKILL_DIR = "skills"
+
     def pdm_build_hook_enabled(self, context: Context) -> bool:
         if context.target not in ("wheel", "editable"):
             return False
@@ -43,7 +45,7 @@ class BubBuildHook(BuildHookInterface):
             if not path.is_file():
                 continue
             relative = path.relative_to(staging_root)
-            files[(Path("bub_skills") / relative).as_posix()] = path
+            files[(Path(self.SKILL_DIR) / relative).as_posix()] = path
 
     def pdm_build_finalize(self, context: Context, artifact: Path) -> None:
         build_root = self._build_root(context, create=False)
@@ -60,12 +62,12 @@ class BubBuildHook(BuildHookInterface):
 
     @staticmethod
     def _build_root(context: Context, create: bool = True) -> Path | None:
-        existing = getattr(context, "_bub_build_root", None)
+        existing = getattr(context, "_skills_build_root", None)
         if existing is not None:
             return existing
         if not create:
             return None
 
-        build_root = Path(tempfile.mkdtemp(prefix="pdm-build-bub-"))
-        setattr(context, "_bub_build_root", build_root)
+        build_root = Path(tempfile.mkdtemp(prefix="pdm-build-skills-"))
+        setattr(context, "_skills_build_root", build_root)
         return build_root

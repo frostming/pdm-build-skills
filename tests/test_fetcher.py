@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from pdm_build_bub.config import SkillSource
-from pdm_build_bub.fetcher import materialize_sources
+from pdm_build_skills.config import SkillSource
+from pdm_build_skills.fetcher import materialize_sources
 
 
 def test_materialize_sources_honors_ref_and_include(

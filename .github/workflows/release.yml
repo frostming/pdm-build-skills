@@ -1,5 +1,4 @@
 name: Release
-
 on:
   push:
     tags:
@@ -22,7 +21,7 @@ jobs:
       id-token: write
     environment:
       name: pypi
-      url: https://pypi.org/project/pdm-build-bub/${{ github.ref_name }}
+      url: https://pypi.org/project/pdm-build-skills/${{ github.ref_name }}
     runs-on: ubuntu-latest
     needs: build-package
 
